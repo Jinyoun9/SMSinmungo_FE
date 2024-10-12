@@ -51,7 +51,7 @@ const VideoChat = () => {
 
   const handleSendMessage = () => {
     if (message) {
-      socketRef.current.emit("chat message", { room: roomName, message });
+      socketRef.current.emit("chat message", { room: roomName, message, username:"박진영" });
       setMessage("");
     }
   };
@@ -64,7 +64,7 @@ const VideoChat = () => {
 
   return (
     <div className="container">
-      <h1 className="text-center my-3">WebRTC React App</h1>
+      <h1 className="text-center my-3">현재 방 번호: {roomName}</h1>
       {!inRoom && (
         <div className="d-flex justify-content-center mb-3">
           <div className="input-group input-group-lg" style={{ maxWidth: "400px" }}>
