@@ -11,6 +11,7 @@ const VideoChat = () => {
   const [message, setMessage] = useState("");
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
+  const [raiseHandList, setRaiseHandList] = useState([]); // 손들기 순서 목록
   const localVideoRef = useRef(null);
   const socketRef = useRef(null);
   const [currentNum, setCurrentNum] = useState("");
@@ -20,12 +21,20 @@ const VideoChat = () => {
     socketRef.current = io.connect("http://localhost:8000");
 
     socketRef.current.on("chat message", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data.message]);
+      setMessages((prevMessages) => [...prevMessages, `${data.username}: ${data.message}`]);
     });
+
+    // 현재 인원 정보 수신
     socketRef.current.on("currentNum", (num) => {
-          console.log("Current number of users in room: ", num);
-          setCurrentNum(num); // 상태 업데이트
+      console.log("Current number of users in room: ", num);
+      setCurrentNum(num); // 상태 업데이트
     });
+
+    // 손들기 요청 수신 (서버에서 updateHandRaiseList 이벤트 받음)
+    socketRef.current.on("updateHandRaiseList", (handRaiseList) => {
+      setRaiseHandList(handRaiseList); // 발언 순서 목록 업데이트
+    });
+
     return () => {
       // 컴포넌트 언마운트 시 소켓 연결 해제
       socketRef.current.disconnect();
@@ -39,21 +48,35 @@ const VideoChat = () => {
     }
     socketRef.current.emit("joinRoom", roomName);
     setInRoom(true);
+
     socketRef.current.on("currentNum", (num) => {
-              console.log("Current number of users in room: ", num);
-              setCurrentNum(num); // 상태 업데이트
+      console.log("Current number of users in room: ", num);
+      setCurrentNum(num); // 상태 업데이트
     });
-    navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then((stream) => {
-      localVideoRef.current.srcObject = stream;
-      setLocalStream(stream);
-    }).catch(console.error);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: true })
+      .then((stream) => {
+        localVideoRef.current.srcObject = stream;
+        setLocalStream(stream);
+      })
+      .catch(console.error);
   };
 
   const handleSendMessage = () => {
     if (message) {
-      socketRef.current.emit("chat message", { room: roomName, message, username:"박진영" });
+      socketRef.current.emit("chat message", { room: roomName, message, username: "박진영" });
       setMessage("");
     }
+  };
+
+  const handleHandsUp = () => {
+    const userName = "박진영"; // 실제 사용자의 이름
+    socketRef.current.emit("handsup", { username: "박진영" });
+  };
+
+  const handleHandsDown = () => {
+    const userName = "박진영"; // 실제 사용자의 이름
+    socketRef.current.emit("handsdown", { room: roomName, userName });
   };
 
   const toggleTrack = (trackType) => {
@@ -92,12 +115,37 @@ const VideoChat = () => {
             <video muted ref={localVideoRef} autoPlay style={{ width: "600px", height: "450px" }} />
           </div>
           <h3>현재인원: {currentNum}</h3>
+
           <div className="d-flex flex-column align-items-center mt-3">
+            {/* 손들기 버튼 */}
+            <button className="btn btn-warning mb-3" onClick={handleHandsUp}>
+              손들기
+            </button>
+            <button className="btn btn-warning mb-3" onClick={handleHandsDown}>
+              손 내리기
+            </button>
+
+            {/* 발언 순서 목록 */}
+            <ul className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
+              {raiseHandList.map((user, index) => (
+                <li key={index} className="list-group-item">
+                  {index + 1}. {user}
+                </li>
+              ))}
+            </ul>
+
+            {/* 발언 순서 목록을 h3로 표시 */}
+            {raiseHandList.length > 0 && (
+              <h3>발언 순서: {raiseHandList.map((user, index) => `${index + 1}. ${user}`).join(', ')}</h3>
+            )}
+
+            {/* 채팅 메시지 */}
             <ul id="messages" className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
               {messages.map((msg, index) => (
                 <li key={index} className="list-group-item">{msg}</li>
               ))}
             </ul>
+
             <div className="input-group input-group-lg" style={{ maxWidth: "600px" }}>
               <input
                 type="text"
