@@ -11,23 +11,17 @@ const VideoChat = () => {
   const [message, setMessage] = useState("");
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
-  const [raiseHandList, setRaiseHandList] = useState([]);
-  const [isStreamActive, setIsStreamActive] = useState(false); // 송출 활성화 여부
+  const [raiseHandList, setRaiseHandList] = useState([]); // 손들기 순서 목록
   const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
   const socketRef = useRef(null);
-  const peerConnectionRef = useRef(null);
   const [currentNum, setCurrentNum] = useState("");
 
   useEffect(() => {
     // Socket.IO 서버 연결
     socketRef.current = io.connect("http://localhost:8000");
+
     socketRef.current.on("chat message", (data) => {
       setMessages((prevMessages) => [...prevMessages, `${data.username}: ${data.message}`]);
-    });
-
-    socketRef.current.on("streamActive", (isActive) => {
-      setIsStreamActive(isActive);
     });
 
     // 현재 인원 정보 수신
@@ -41,102 +35,31 @@ const VideoChat = () => {
       setRaiseHandList(handRaiseList); // 발언 순서 목록 업데이트
     });
 
-    // WebRTC offer, answer, candidate 이벤트 수신
-    socketRef.current.on("offer", handleReceiveOffer);
-    socketRef.current.on("answer", handleReceiveAnswer);
-    socketRef.current.on("candidate", handleNewICECandidateMsg);
-
     return () => {
+      // 컴포넌트 언마운트 시 소켓 연결 해제
       socketRef.current.disconnect();
     };
   }, []);
 
-  const handleConnect = async () => {
+  const handleConnect = () => {
     if (roomName === "") {
       alert("Room name cannot be empty!");
       return;
     }
-
     socketRef.current.emit("joinRoom", roomName);
     setInRoom(true);
 
-    // 첫 번째 사용자는 카메라와 마이크에 접근하여 스트림을 송출
-    if (!isStreamActive) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-        setLocalStream(stream);
+    socketRef.current.on("currentNum", (num) => {
+      console.log("Current number of users in room: ", num);
+      setCurrentNum(num); // 상태 업데이트
+    });
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: true })
+      .then((stream) => {
         localVideoRef.current.srcObject = stream;
-
-        // 첫 번째 사용자만 스트림을 송출하는 피어 연결 생성
-        initializePeerConnection(stream);
-
-        // 송출 시작 상태 서버에 전달
-        socketRef.current.emit("streamActive", true, roomName);
-        setIsStreamActive(true);
-
-        const offer = await peerConnectionRef.current.createOffer();
-        await peerConnectionRef.current.setLocalDescription(offer);
-        socketRef.current.emit("offer", offer, roomName);
-      } catch (error) {
-        console.error("Error accessing media devices:", error);
-        alert("카메라와 마이크에 접근할 수 없습니다. 다른 애플리케이션이 사용 중인지 확인해주세요.");
-      }
-    } else {
-      // 이미 스트림이 활성화된 경우, 첫 번째 사용자의 스트림을 요청
-      socketRef.current.emit("requestStream", roomName);
-    }
-  };
-
-  // 스트림 송출을 위한 피어 연결 초기화 함수
-  const initializePeerConnection = (stream) => {
-    peerConnectionRef.current = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    });
-
-    stream.getTracks().forEach((track) => peerConnectionRef.current.addTrack(track, stream));
-
-    peerConnectionRef.current.onicecandidate = (event) => {
-      if (event.candidate) {
-        socketRef.current.emit("candidate", event.candidate, roomName);
-      }
-    };
-
-    peerConnectionRef.current.ontrack = (event) => {
-      setRemoteStream(event.streams[0]);
-      remoteVideoRef.current.srcObject = event.streams[0];
-    };
-  };
-
-  // 첫 번째 사용자의 스트림을 수신할 때 이벤트 리스너 설정
-  useEffect(() => {
-    socketRef.current.on("provideStream", (streamData) => {
-      const stream = new MediaStream(streamData.tracks);
-      setRemoteStream(stream);
-      remoteVideoRef.current.srcObject = stream;
-    });
-
-    return () => {
-      socketRef.current.off("provideStream");
-    };
-  }, []);
-
-  const handleReceiveOffer = async (offer) => {
-    if (!peerConnectionRef.current) handleConnect();
-
-    await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(offer));
-    const answer = await peerConnectionRef.current.createAnswer();
-    await peerConnectionRef.current.setLocalDescription(answer);
-
-    socketRef.current.emit("answer", answer, roomName);
-  };
-
-  const handleReceiveAnswer = async (answer) => {
-    await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer));
-  };
-
-  const handleNewICECandidateMsg = (candidate) => {
-    const iceCandidate = new RTCIceCandidate(candidate);
-    peerConnectionRef.current.addIceCandidate(iceCandidate);
+        setLocalStream(stream);
+      })
+      .catch(console.error);
   };
 
   const handleSendMessage = () => {
@@ -147,13 +70,13 @@ const VideoChat = () => {
   };
 
   const handleHandsUp = () => {
-    const userName = "박진영";
+    const userName = "박진영"; // 실제 사용자의 이름
     socketRef.current.emit("handsup", { username: "박진영" });
   };
 
   const handleHandsDown = () => {
-    const userName = "박진영";
-    socketRef.current.emit("handsdown", { room: roomName, userName });
+    const userName = "박진영"; // 실제 사용자의 이름
+    socketRef.current.emit("handsdown", { room: roomName, username: "박진영" });
   };
 
   const toggleTrack = (trackType) => {
@@ -190,11 +113,11 @@ const VideoChat = () => {
             style={{ width: "600px", height: "450px" }}
           >
             <video muted ref={localVideoRef} autoPlay style={{ width: "600px", height: "450px" }} />
-            <video ref={remoteVideoRef} autoPlay style={{ width: "600px", height: "450px" }} />
           </div>
           <h3>현재인원: {currentNum}</h3>
 
           <div className="d-flex flex-column align-items-center mt-3">
+            {/* 손들기 버튼 */}
             <button className="btn btn-warning mb-3" onClick={handleHandsUp}>
               손들기
             </button>
@@ -202,17 +125,19 @@ const VideoChat = () => {
               손 내리기
             </button>
 
-            {/* 발언 순서 카드 스타일 목록 */}
-            <div className="d-flex flex-wrap justify-content-center mb-3" style={{ gap: "10px", maxWidth: "600px", maxHeight: "300px", overflowY: "auto" }}>
+            {/* 발언 순서 목록 */}
+            <ul className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
               {raiseHandList.map((user, index) => (
-                <div key={index} className="card text-center" style={{ width: "120px", borderRadius: "10px" }}>
-                  <div className="card-body">
-                    <h5 className="card-title" style={{ fontSize: "1.5em", color: "#ffc107" }}>{index + 1}번</h5>
-                    <p className="card-text" style={{ fontSize: "1.1em" }}>{user}</p>
-                  </div>
-                </div>
+                <li key={index} className="list-group-item">
+                  {index + 1}. {user}
+                </li>
               ))}
-            </div>
+            </ul>
+
+            {/* 발언 순서 목록을 h3로 표시 */}
+            {raiseHandList.length > 0 && (
+              <h3>발언 순서: {raiseHandList.map((user, index) => `${index + 1}. ${user}`).join(', ')}</h3>
+            )}
 
             {/* 채팅 메시지 */}
             <ul id="messages" className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>

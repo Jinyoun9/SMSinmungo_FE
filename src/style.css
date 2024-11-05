@@ -1,3 +1,37 @@
+.container-fluid {
+  background-color: #212121;
+  height: 100vh;
+}
+
+#remoteVideoContainer {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 3px solid #007bff;
+}
+
+#messages {
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.list-group-item {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000;
+}
+
+.input-group-lg .form-control {
+  background-color: #FFFFFF;
+  border: 1px solid #444;
+  color: #000;
+}
+
+.input-group-lg .btn-primary {
+  background-color: #0E207F;
+  border: none;
+}
+
 .btn-circle {
   width: 50px;
   height: 50px;
@@ -6,6 +40,14 @@
   align-items: center;
   justify-content: center;
   margin: 0 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-circle:hover {
+  background-color: #0056b3;
 }
 
 .enabled-style {
@@ -16,4 +58,25 @@
 .disabled-style {
   background-color: #6c757d;
   color: white;
+}
+
+.video-controls {
+  margin-top: 15px;
+}
+
+/* h3 스타일 추가 */
+h3 {
+  color: #f1c40f; /* 텍스트 색상 */
+  font-size: 1.5rem; /* 텍스트 크기 */
+  background-color: #333; /* 배경 색상 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  text-align: center; /* 중앙 정렬 */
+  margin: 20px 0; /* 위아래 여백 */
+  border: 2px solid #007bff; /* 테두리 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+}
+
+h4 {
+  color: black;
 }
