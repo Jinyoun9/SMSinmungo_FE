@@ -3,7 +3,93 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>meeting</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/meeting.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="element">
+        <div class="navigation">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                id="nav-title"
+                class="nav-link active"
+                aria-current="page"
+                style="color: #4582d0"
+                href="#"
+                >상명신문고</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub1"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="main.html"
+                >불편사항</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub2"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="studentThink.html"
+                >의견수렴함</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub3"
+                class="nav-link"
+                style="color: #4b4b56"
+                href="meeting.html"
+                >간담회</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub4"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="myPage.html"
+                >마이페이지</a
+              >
+            </li>
+            <div class="nav-radius3">
+              <div class="nav-textframe7">
+                <form>
+                  <input
+                    type="button"
+                    id="submit1"
+                    value="로그아웃"
+                    onclick="gotoMain()"
+                  />
+                </form>
+              </div>
+            </div>
+          </ul>
+        </div>
+        <div class="frame1">
+          <div class="text-frame1">
+            <span>실시간 간담회</span>
+          </div>
+          <div class="live-frame">
+            <div class="live-textframe">
+              <span>LIVE</span>
+              <img src="/img/live.png" width="15px" height="15px" />
+            </div>
+            <div class="live-before">
+              <p>LIVE 예정입니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/meeting.js"></script>
+  </body>
 </html>
