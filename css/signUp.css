@@ -1,0 +1,159 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+.element {
+  display: flex;
+  width: 100%;
+}
+.container {
+  width: 1244px;
+  height: 720px;
+}
+.frame1 {
+  width: 404px;
+  height: 638px;
+  margin-top: 41px;
+  margin-left: 128px;
+}
+.text-frame1 {
+  display: flex;
+  font-size: 32px;
+  font-weight: normal;
+}
+.frame2 {
+  margin-top: 58px;
+}
+.text-frame2-1 {
+  font-size: 14px;
+  font-weight: 400;
+}
+#inputText {
+  width: 100%;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  font-size: 10px;
+  padding-left: 10px;
+}
+.text-frame3 {
+  margin-top: 23px;
+}
+.text-frame3-1 {
+  font-size: 14px;
+  font-weight: 400;
+}
+.text-frame4 {
+  margin-top: 23px;
+}
+.text-frame4-1 {
+  font-size: 14px;
+  font-weight: 400;
+}
+.text-frame5 {
+  margin-top: 23px;
+}
+.text-frame5-1 {
+  font-size: 14px;
+  font-weight: 400;
+}
+#inputDate {
+  width: 100%;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  font-size: 10px;
+  padding-left: 10px;
+}
+.frame3 {
+  margin-top: 30px;
+}
+#submit {
+  width: 100%;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid #58cc02;
+  font-size: 10px;
+  padding-left: 10px;
+  background-color: #58cc02;
+  color: white;
+}
+.frame4 {
+  display: flex;
+  margin-top: 24px;
+  flex-basis: 100%;
+  align-items: center;
+  color: black;
+  font-size: 10px;
+}
+.frame4::before,
+.frame4::after {
+  content: "";
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.3);
+  height: 1px;
+  font-size: 0px;
+  margin: 0px 8px;
+}
+.frame5 {
+  display: flex;
+  margin-top: 61px;
+  justify-content: space-between;
+  align-items: center;
+}
+.kakao-frame {
+  display: flex;
+  width: 180px;
+  height: 32px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+}
+.kakao-textframe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-frame1 {
+  margin-left: 23px;
+}
+.kakao-textframe span {
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 15px;
+}
+.apple-frame {
+  display: flex;
+  width: 180px;
+  height: 32px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+}
+.apple-textframe {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-frame2 {
+  margin-left: 23px;
+}
+.apple-textframe span {
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 15px;
+}
+.frame6 {
+  margin-top: 25.02px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+.text-frame7 span:nth-child(2) {
+  color: blue;
+}
+.center-frame2 {
+  margin-left: 106px;
+}

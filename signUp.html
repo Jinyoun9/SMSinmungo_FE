@@ -3,82 +3,115 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>singUp</title>
+    <title>signUp</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/signUp.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
-      <div class="center-frame1">
-        <div class="frame1">
-          <div class="text-frame1"><span>Welcome!</span></div>
-          <div class="frame2">
-            <div class="text-frame2">
-              <div class="text-frame2-1">닉네임</div>
-              <div class="radius-frame1">
-                <div class="text-frame2-2">닉네임을 입력해주세요.</div>
+      <div class="element">
+        <div class="center-frame1">
+          <div class="frame1">
+            <div class="text-frame1"><span>Welcome!</span></div>
+            <div class="frame2">
+              <div class="text-frame2">
+                <div class="text-frame2-1">닉네임</div>
+                <div class="radius-frame1">
+                  <div class="text-frame2-2">
+                    <input
+                      type="text"
+                      id="inputText"
+                      placeholder="닉네임을 입력해주세요."
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="text-frame3">
+                <div class="text-frame3-1">이메일</div>
+                <div class="radius-frame2">
+                  <div class="text-frame3-2">
+                    <input
+                      type="text"
+                      id="inputText"
+                      placeholder="이메일을 입력해주세요."
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="text-frame4">
+                <div class="text-frame4-1">비밀번호</div>
+                <div class="radius-frame3">
+                  <div class="text-frame4-2">
+                    <input
+                      type="password"
+                      id="inputText"
+                      placeholder="비밀번호를 입력해주세요."
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="text-frame5">
+                <div class="text-frame5-1">생년월일</div>
+                <div class="radius-frame4">
+                  <div class="text-frame5-2">
+                    <input type="date" id="inputDate" />
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="text-frame3">
-              <div class="text-frame3-1">이메일</div>
-              <div class="radius-frame2">
-                <div class="text-frame3-2">이메일을 입력해주세요.</div>
+            <div class="frame3">
+              <div class="singUp-radius">
+                <div class="text-frame6">
+                  <form>
+                    <input type="submit" id="submit" value="회원가입" />
+                  </form>
+                </div>
               </div>
             </div>
-            <div class="text-frame4">
-              <div class="text-frame4-1">비밀번호</div>
-              <div class="radius-frame3">
-                <div class="text-frame4-2">비밀번호를 입력해주세요.</div>
+            <div class="frame4">
+              <span>or</span>
+            </div>
+            <div class="frame5">
+              <div class="kakao-frame">
+                <div class="kakao-textframe">
+                  <img
+                    src="./img/kakao.png"
+                    class="img-frame1"
+                    width="23.04px"
+                    height="23.04px"
+                  />
+                  <span>카카오로 시작하기</span>
+                </div>
+              </div>
+              <div class="apple-frame">
+                <div class="apple-textframe">
+                  <img
+                    src="./img/apple.png"
+                    class="img-frame2"
+                    width="20px"
+                    height="23px"
+                  />
+                  <span>Apple로 시작하기</span>
+                </div>
               </div>
             </div>
-            <div class="text-frame5">
-              <div class="text-frame5-1">생년월일</div>
-              <div class="radius-frame4">
-                <div class="text-frame5-2">생년월일을 입력해주세요.</div>
+            <div class="frame6">
+              <div class="text-frame7">
+                <span>계정이 있으십니까?</span>
+                <span><a href="login.html">로그인</a></span>
               </div>
-            </div>
-          </div>
-          <div class="frame3">
-            <div class="singUp-radius">
-              <div class="text-frame6">회원가입</div>
-            </div>
-          </div>
-          <div class="frame4">
-            <span>or</span>
-          </div>
-          <div class="frame5">
-            <div class="kakao-frame">
-              <div class="kakao-textframe">
-                <img
-                  src="./img/kakao.png"
-                  class="img-frame1"
-                  width="23px"
-                  height="23px"
-                />
-                <span>카카오로 시작하기</span>
-              </div>
-            </div>
-            <div class="apple-frame">
-              <div class="apple-textframe">
-                <img
-                  src="./img/apple.png"
-                  class="img-frame2"
-                  width="20px"
-                  height="23px"
-                />
-                <span>Apple로 시작하기</span>
-              </div>
-            </div>
-          </div>
-          <div class="frame6">
-            <div class="text-frame7">
-              <span>계정이 있으십니까?</span>
-              <span>로그인</span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="center-frame2">
-        <img src="" alt="img" class="centerimg" />
+        <div class="center-frame2">
+          <img src="./img/background.png" alt="img" class="centerimg" />
+        </div>
       </div>
     </div>
 
