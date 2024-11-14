@@ -1,0 +1,139 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+.element {
+  width: 1244px;
+  height: 720px;
+}
+.navigation {
+  padding-top: 10px;
+}
+#nav-title {
+  font-weight: bold;
+}
+#nav-sub4 {
+  font-weight: bold;
+}
+.nav-radius3 {
+  display: flex;
+  padding-left: 590px;
+  padding-top: 2px;
+}
+#submit1 {
+  font-size: 12px;
+  width: 75px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #ea4c89;
+  background-color: #ea4c89;
+  color: white;
+}
+.frame1 {
+  position: relative;
+  width: 543px;
+  height: 739px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background-color: #ffffff;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+.text-frame1 {
+  padding-left: 40px;
+  padding-top: 40px;
+  font-weight: bold;
+  font-size: 18px;
+}
+.frame1-1 {
+  display: flex;
+}
+.radius-frame1 {
+  padding-top: 40px;
+  padding-left: 300px;
+}
+#submit2 {
+  width: 58px;
+  height: 45px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.frame2-1 {
+  padding-top: 45px;
+  padding-left: 40px;
+}
+.text-frame2 {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+#email {
+  width: 460px;
+  height: 40px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 15px;
+}
+.frame3 {
+  padding-top: 24px;
+  padding-left: 40px;
+}
+.text-frame3 {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+#passWord {
+  width: 460px;
+  height: 40px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 15px;
+}
+.frame4 {
+  padding-top: 24px;
+  padding-left: 40px;
+}
+.text-frame4 {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+#nickName {
+  width: 460px;
+  height: 40px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 15px;
+}
+.frame5 {
+  padding-top: 24px;
+  padding-left: 40px;
+}
+.text-frame5 {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+#birth {
+  width: 460px;
+  height: 40px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 15px;
+}
+.text-frame6 {
+  padding-left: 356px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+.go-think {
+  display: flex;
+  font-size: 15px;
+  flex-direction: column;
+}

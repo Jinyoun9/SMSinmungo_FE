@@ -3,7 +3,155 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>ownerPage</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/ownerPage.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="element">
+        <div class="navigation">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                id="nav-title"
+                class="nav-link active"
+                aria-current="page"
+                style="color: #4582d0"
+                href="#"
+                >상명신문고</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub1"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="main.html"
+                >불편사항</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub2"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="studentThink.html"
+                >의견수렴함</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub3"
+                class="nav-link"
+                style="color: #4b4b56"
+                href="meeting.html"
+                >간담회</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub4"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="myPage.html"
+                >마이페이지</a
+              >
+            </li>
+            <div class="nav-radius3">
+              <div class="nav-textframe7">
+                <form>
+                  <input
+                    type="button"
+                    id="submit1"
+                    value="로그아웃"
+                    onclick="gotoMain()"
+                  />
+                </form>
+              </div>
+            </div>
+          </ul>
+        </div>
+        <div class="frame1">
+          <div class="frame1-1">
+            <div class="text-frame1">
+              <span>개인 정보 관리</span>
+            </div>
+            <div class="radius-frame1">
+              <div class="radius-textFrame1">
+                <form>
+                  <input type="button" id="submit2" value="확인" onclick="" />
+                </form>
+              </div>
+            </div>
+          </div>
+          <div clsss="frame2">
+            <div class="frame2-1">
+              <div class="text-frame2">
+                <span>이메일</span>
+              </div>
+              <div class="radius-frame2">
+                <div class="input-frame1">
+                  <input
+                    type="text"
+                    id="email"
+                    placeholder="sangchun"
+                    disabled
+                    class="email-text"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="frame3">
+              <div class="text-frame3">
+                <span>비밀번호</span>
+              </div>
+              <div class="radius-frame3">
+                <div class="input-frame2">
+                  <input
+                    type="text"
+                    id="passWord"
+                    class="pw-text"
+                    placeholder="xxx"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="frame4">
+              <div class="text-frame4">
+                <span>닉네임</span>
+              </div>
+              <div class="radius-frame4">
+                <div class="input-frame3">
+                  <input
+                    type="text"
+                    id="nickName"
+                    class="nNtext"
+                    placeholder="sangchun"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="frame5">
+              <div class="text-frame5">
+                <span>생년월일</span>
+              </div>
+              <div class="radius-frame4">
+                <input type="date" id="birth" class="birth-input" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-frame6">
+          <div class="go-think">
+            <a href="" id="think">- 내가 쓴 의견수렴함 보기</a>
+            <a href="" id="think">- 내가 단 댓글의 글 보기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/ownerPage.js"></script>
+  </body>
 </html>
