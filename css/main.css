@@ -156,7 +156,7 @@
   align-items: center;
   margin: 0 auto;
 }
-.page-radiusFrame2 {
+.page-radiusFrame1 {
   display: flex;
   position: relative;
   border: 1px solid #41af6f;
@@ -194,7 +194,7 @@
   border: 1px solid #ccc;
   padding: 10px;
 }
-.page-radiusFrame5 {
+.page-radiusFrame2 {
   display: flex;
   position: relative;
   border: 1px solid #5988d9;
@@ -266,4 +266,16 @@
 }
 .view-count {
   font-size: 15px;
+}
+.page-frame5 {
+  border: 1px solid #5988d9;
+  border-radius: 10px;
+  display: flex;
+  position: relative;
+  width: 340px;
+  height: 147px;
+  margin: 0 auto;
+  margin-top: 15px;
+  cursor: pointer;
+  background-color: rgba(217, 217, 217, 0.1);
 }
