@@ -60,6 +60,7 @@ input {
 }
 input::placeholder {
   color: black;
+  font-size: 15px;
 }
 .icon {
   display: flex;
