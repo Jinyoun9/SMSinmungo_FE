@@ -169,3 +169,8 @@
   width: 606px;
   height: 720px;
 }
+.text-frame8 {
+  position: absolute;
+  margin-left: 120px;
+  margin-top: 30px;
+}
