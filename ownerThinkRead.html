@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ownerThinkRead</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/ownerThinkRead.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="element">
+        <div class="navigation">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                id="nav-title"
+                class="nav-link active"
+                aria-current="page"
+                style="color: #4582d0"
+                href="#"
+                >상명신문고</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub1"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="main.html"
+                >불편사항</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub2"
+                class="nav-link"
+                style="color: #4b4b56"
+                href="studentThink.html"
+                >의견수렴함</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub3"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="meeting.html"
+                >간담회</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="nav-sub4"
+                class="nav-link"
+                style="color: #6e6d7a"
+                href="myPage.html"
+                >마이페이지</a
+              >
+            </li>
+            <div class="nav-radius1">
+              <div class="nav-textframe5">
+                <form>
+                  <input
+                    type="button"
+                    id="submit1"
+                    value="회원가입"
+                    onclick="gotosignUp()"
+                  />
+                </form>
+              </div>
+            </div>
+            <div class="nav-radius2">
+              <div class="nav-textframe6">
+                <form>
+                  <input
+                    type="button"
+                    id="submit2"
+                    value="로그인"
+                    onclick="gotologin()"
+                  />
+                </form>
+              </div>
+            </div>
+            <div class="nav-radius3">
+              <div class="nav-textframe7">
+                <form>
+                  <input
+                    type="button"
+                    id="submit3"
+                    value="로그아웃"
+                    onclick="gotoMain()"
+                  />
+                </form>
+              </div>
+            </div>
+          </ul>
+        </div>
+        <div class="frame1">
+          <div class="frame1-1">
+            <div class="text-frame1">
+              <span>이니로님의 민원</span>
+              <!--JS로 이름 넣기-->
+            </div>
+            <div class="radius-frame2">
+              <div class="radius-likePng">
+                <img src="./img/like.png" id="like-icon" alt="like" />
+                <!--JS-->
+              </div>
+              <div class="radius-num">
+                <span id="like-count">0</span>
+                <!--JS-->
+              </div>
+            </div>
+          </div>
+          <div class="frame2">
+            <div class="text-frame2">
+              <p>관리자</p>
+            </div>
+          </div>
+          <div class="frame3">
+            <div class="text-frame3">
+              <span
+                >※ 건전한 토론을 위해서 비방·욕설·도배 등 토론을 방해하거나
+                토론과 무관한 게시물은 삭제될 수 있습니다.</span
+              >
+            </div>
+          </div>
+          <div class="frame4">
+            <div class="text-frame4">
+              <textarea type="text" placeholder="관리자 댓글"></textarea>
+            </div>
+            <div class="radius-btn">
+              <div class="btn-text">
+                <span>등록</span>
+              </div>
+            </div>
+            <div class="bottom-line1"></div>
+          </div>
+          <div class="frame5">
+            <div class="text-frame5">
+              <img src="./img/human.png" class="human" />
+              <span>자문단 <###></span>
+              <button type="button" class="delete" id="delete">삭제하기</button>
+              <!--이름 js-->
+            </div>
+            <div class="text-frame5-1">
+              <span>참여 완료했습니다!!</span>
+              <!--js-->
+            </div>
+            <div class="happy-frame">
+              <div class="happy-btn">
+                <img src="./img/happy.png" width="20px" id="happy" />
+                <span id="happy-count">1</span>
+                <!--숫자늘어나깉-->
+              </div>
+            </div>
+            <div class="sad-frame">
+              <div class="sad-btn">
+                <img src="./img/sad.png" width="20px" id="sad" />
+                <span id="sad-count">1</span>
+                <!--줄어들기-->
+              </div>
+            </div>
+            <div class="bottom-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/js/ownerThinkRead.js"></script>
+  </body>
+</html>
