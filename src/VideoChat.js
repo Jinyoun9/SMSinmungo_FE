@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./style.css"; // 스타일링 파일을 따로 관리
+import "./style.css";
 
 const VideoChat = () => {
   const [roomName, setRoomName] = useState("");
