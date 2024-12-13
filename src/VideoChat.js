@@ -7,7 +7,7 @@ import "./style.css";
 const VideoChat = () => {
   const [roomName, setRoomName] = useState("");
   const [inRoom, setInRoom] = useState(false);
-  const [isStreamer, setIsStreamer] = useState(false);
+  const [isStreamer, setIsStreamer] = useState(false); // 방송자 여부
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
 
@@ -17,9 +17,10 @@ const VideoChat = () => {
   const peerRef = useRef(null);
 
   useEffect(() => {
+    // Socket.IO 서버 연결
     socketRef.current = io("http://localhost:8000");
 
-    // 방송자로부터 스트림 offer를 받는 이벤트
+    // 방송자로부터 Offer 수신
     socketRef.current.on("offer", (data) => {
       if (!isStreamer) {
         const peer = new SimplePeer({
@@ -27,34 +28,35 @@ const VideoChat = () => {
           trickle: false,
         });
 
-        peer.signal(data.offer); // 스트리머의 offer 수신
+        peer.signal(data.offer); // 스트리머의 Offer 처리
         peer.on("stream", (stream) => {
           setRemoteStream(stream);
-          remoteVideoRef.current.srcObject = stream; // 시청자는 방송자의 스트림 표시
+          remoteVideoRef.current.srcObject = stream; // 스트리머의 스트림을 비디오에 연결
         });
 
         peerRef.current = peer;
-        peer.on("signal", (signal) => {
-          socketRef.current.emit("answer", { answer: signal, roomName });
+        peer.on("signal", (answer) => {
+          socketRef.current.emit("answer", { answer, roomName });
         });
       }
     });
 
-    // 스트리머가 시청자의 answer를 처리
+    // 시청자의 Answer 수신
     socketRef.current.on("answer", (data) => {
       if (isStreamer) {
         peerRef.current.signal(data.answer);
       }
     });
 
-    return () => socketRef.current.disconnect();
+    return () => socketRef.current.disconnect(); // 컴포넌트 언마운트 시 소켓 연결 해제
   }, [isStreamer]);
 
   const handleCreateRoom = () => {
-    if (roomName === "") {
+    if (!roomName.trim()) {
       alert("Room name cannot be empty!");
       return;
     }
+
     setIsStreamer(true); // 방송자 설정
     setInRoom(true);
     socketRef.current.emit("createRoom", roomName);
@@ -68,23 +70,27 @@ const VideoChat = () => {
         const peer = new SimplePeer({
           initiator: true,
           trickle: false,
-          stream,
+          stream, // 방송자의 스트림 추가
         });
 
-        peer.on("signal", (signal) => {
-          socketRef.current.emit("offer", { offer: signal, roomName });
+        peer.on("signal", (offer) => {
+          socketRef.current.emit("offer", { offer, roomName });
         });
 
         peerRef.current = peer;
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error("Error accessing media devices:", err);
+        alert("Unable to access camera or microphone.");
+      });
   };
 
   const handleJoinRoom = () => {
-    if (roomName === "") {
+    if (!roomName.trim()) {
       alert("Room name cannot be empty!");
       return;
     }
+
     setIsStreamer(false); // 시청자 설정
     setInRoom(true);
     socketRef.current.emit("joinRoom", roomName);
@@ -92,7 +98,8 @@ const VideoChat = () => {
 
   return (
     <div className="container">
-      <h1 className="text-center my-3">Live Streaming</h1>
+      <h1 className="text-center my-3">Live Video Streaming</h1>
+
       {!inRoom && (
         <div className="d-flex justify-content-center mb-3">
           <input
@@ -101,6 +108,7 @@ const VideoChat = () => {
             placeholder="Enter room name"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
+            style={{ maxWidth: "300px" }}
           />
           <button className="btn btn-success me-2" onClick={handleCreateRoom}>
             Create Room
@@ -112,11 +120,32 @@ const VideoChat = () => {
       )}
 
       {inRoom && (
-        <div className="video-container">
-          {isStreamer ? (
-            <video ref={localVideoRef} autoPlay muted style={{ width: "600px", height: "400px" }} />
-          ) : (
-            <video ref={remoteVideoRef} autoPlay style={{ width: "600px", height: "400px" }} />
+        <div>
+          <div className="d-flex justify-content-center mb-3">
+            <h2>Room: {roomName}</h2>
+          </div>
+
+          <div className="d-flex justify-content-center">
+            {isStreamer ? (
+              <video
+                ref={localVideoRef}
+                autoPlay
+                muted
+                style={{ width: "600px", height: "400px", border: "2px solid black" }}
+              />
+            ) : (
+              <video
+                ref={remoteVideoRef}
+                autoPlay
+                style={{ width: "600px", height: "400px", border: "2px solid black" }}
+              />
+            )}
+          </div>
+
+          {!isStreamer && !remoteStream && (
+            <div className="d-flex justify-content-center mt-3">
+              <p>Waiting for the broadcaster...</p>
+            </div>
           )}
         </div>
       )}
