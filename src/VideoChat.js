@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import SimplePeer from "simple-peer";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
 const VideoChat = () => {
   const [roomName, setRoomName] = useState("");
-  const [isStreamer, setIsStreamer] = useState(false); // 방송자인지 여부
   const [inRoom, setInRoom] = useState(false);
+  const [isStreamer, setIsStreamer] = useState(false);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
 
@@ -18,7 +19,7 @@ const VideoChat = () => {
   useEffect(() => {
     socketRef.current = io("http://localhost:8000");
 
-    // 방송자가 offer를 보내면 시청자가 이를 처리
+    // 방송자로부터 스트림 offer를 받는 이벤트
     socketRef.current.on("offer", (data) => {
       if (!isStreamer) {
         const peer = new SimplePeer({
@@ -26,10 +27,10 @@ const VideoChat = () => {
           trickle: false,
         });
 
-        peer.signal(data.offer); // 방송자의 offer 수신
+        peer.signal(data.offer); // 스트리머의 offer 수신
         peer.on("stream", (stream) => {
-          setRemoteStream(stream); // 시청자가 방송자의 스트림을 받음
-          remoteVideoRef.current.srcObject = stream;
+          setRemoteStream(stream);
+          remoteVideoRef.current.srcObject = stream; // 시청자는 방송자의 스트림 표시
         });
 
         peerRef.current = peer;
@@ -39,7 +40,7 @@ const VideoChat = () => {
       }
     });
 
-    // 방송자가 시청자의 answer를 처리
+    // 스트리머가 시청자의 answer를 처리
     socketRef.current.on("answer", (data) => {
       if (isStreamer) {
         peerRef.current.signal(data.answer);
@@ -54,11 +55,10 @@ const VideoChat = () => {
       alert("Room name cannot be empty!");
       return;
     }
-    setIsStreamer(true); // 방송자로 설정
+    setIsStreamer(true); // 방송자 설정
     setInRoom(true);
     socketRef.current.emit("createRoom", roomName);
 
-    // 방송자는 카메라와 마이크 활성화
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -85,9 +85,9 @@ const VideoChat = () => {
       alert("Room name cannot be empty!");
       return;
     }
-    setIsStreamer(false); // 시청자로 설정
+    setIsStreamer(false); // 시청자 설정
     setInRoom(true);
-    socketRef.current.emit("joinRoom", roomName); // 서버에 참여 요청
+    socketRef.current.emit("joinRoom", roomName);
   };
 
   return (
