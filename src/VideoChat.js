@@ -96,14 +96,22 @@ const handleJoinRoom = () => {
         return;
     }
 
-    if (!socketRef.current || !socketRef.current.connected) {
-        console.error("Socket is not connected. Reconnecting...");
-        socketRef.current.connect(); // 소켓 재연결 시도
+    if (!socketRef.current) {
+        console.error("Socket not initialized. Initializing...");
+        socketRef.current = io("http://localhost:8000");
     }
 
-    socketRef.current.emit("joinRoom", roomName);
-    console.log("Joining room:", roomName);
+    if (!socketRef.current.connected) {
+        console.error("Socket is not connected. Reconnecting...");
+        socketRef.current.connect();
+    }
+
+    console.log("Emitting joinRoom event for room:", roomName);
+    socketRef.current.emit("joinRoom", roomName, (response) => {
+        console.log("Server response:", response);
+    });
 };
+
 
 
   return (
