@@ -57,19 +57,24 @@ const VideoChat = () => {
   };
 
   const handleConnect = () => {
-    socketRef.current.emit("joinRoom", roomName);
-    setInRoom(true);
+  socketRef.current.emit("joinRoom", roomName);
+  setInRoom(true);
 
-    if (isCreator) {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: true })
-        .then((stream) => {
-          localVideoRef.current.srcObject = stream;
-          setLocalStream(stream);
-        })
-        .catch(console.error);
-    }
-  };
+  // 항상 getUserMedia 호출
+  navigator.mediaDevices
+    .getUserMedia({ audio: true, video: true })
+    .then((stream) => {
+      setLocalStream(stream); // 스트림 상태 업데이트
+      if (isCreator) {
+        // 방 생성자인 경우에만 비디오 연결
+        localVideoRef.current.srcObject = stream;
+      }
+    })
+    .catch((error) => {
+      console.error("Error accessing media devices: ", error);
+    });
+};
+
 
   const handleSendMessage = () => {
     if (message) {
