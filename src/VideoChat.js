@@ -90,7 +90,7 @@ const VideoChat = () => {
       });
   };
 
-  const handleJoinRoom = () => {
+const handleJoinRoom = () => {
     if (!roomName.trim()) {
         alert("Room name cannot be empty!");
         return;
