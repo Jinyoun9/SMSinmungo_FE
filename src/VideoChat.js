@@ -20,35 +20,39 @@ const VideoChat = () => {
     // Socket.IO 서버 연결
     socketRef.current = io("http://localhost:8000");
 
-    // 방송자로부터 Offer 수신
+    // 방송자의 Offer 수신
     socketRef.current.on("offer", (data) => {
+      console.log("Offer received:", data);
       if (!isStreamer) {
         const peer = new SimplePeer({
           initiator: false,
           trickle: false,
         });
 
-        peer.signal(data.offer); // 스트리머의 Offer 처리
+        peer.signal(data.offer); // 방송자의 Offer 처리
         peer.on("stream", (stream) => {
+          console.log("Stream received from broadcaster");
           setRemoteStream(stream);
-          remoteVideoRef.current.srcObject = stream; // 스트리머의 스트림을 비디오에 연결
+          remoteVideoRef.current.srcObject = stream;
         });
 
         peerRef.current = peer;
         peer.on("signal", (answer) => {
+          console.log("Sending answer to broadcaster");
           socketRef.current.emit("answer", { answer, roomName });
         });
       }
     });
 
-    // 시청자의 Answer 수신
+    // 방송자의 Answer 수신
     socketRef.current.on("answer", (data) => {
+      console.log("Answer received:", data);
       if (isStreamer) {
         peerRef.current.signal(data.answer);
       }
     });
 
-    return () => socketRef.current.disconnect(); // 컴포넌트 언마운트 시 소켓 연결 해제
+    return () => socketRef.current.disconnect();
   }, [isStreamer]);
 
   const handleCreateRoom = () => {
@@ -74,6 +78,7 @@ const VideoChat = () => {
         });
 
         peer.on("signal", (offer) => {
+          console.log("Sending offer to viewers");
           socketRef.current.emit("offer", { offer, roomName });
         });
 
@@ -94,6 +99,7 @@ const VideoChat = () => {
     setIsStreamer(false); // 시청자 설정
     setInRoom(true);
     socketRef.current.emit("joinRoom", roomName);
+    console.log("Joining room as viewer");
   };
 
   return (
