@@ -5,7 +5,7 @@ import "./style.css";
 
 const VideoChat = () => {
   const [roomName, setRoomName] = useState("");
-  const [isStreamer, setIsStreamer] = useState(false);
+  const [isStreamer, setIsStreamer] = useState(false); // 방송자인지 여부
   const [inRoom, setInRoom] = useState(false);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
@@ -18,19 +18,17 @@ const VideoChat = () => {
   useEffect(() => {
     socketRef.current = io("http://localhost:8000");
 
+    // 방송자가 offer를 보내면 시청자가 이를 처리
     socketRef.current.on("offer", (data) => {
       if (!isStreamer) {
-        // 시청자가 스트리머의 offer를 수락
         const peer = new SimplePeer({
           initiator: false,
           trickle: false,
-          stream: null,
         });
 
-        peer.signal(data.offer);
+        peer.signal(data.offer); // 방송자의 offer 수신
         peer.on("stream", (stream) => {
-          // 시청자는 스트리머의 스트림을 수신
-          setRemoteStream(stream);
+          setRemoteStream(stream); // 시청자가 방송자의 스트림을 받음
           remoteVideoRef.current.srcObject = stream;
         });
 
@@ -41,9 +39,9 @@ const VideoChat = () => {
       }
     });
 
+    // 방송자가 시청자의 answer를 처리
     socketRef.current.on("answer", (data) => {
       if (isStreamer) {
-        // 스트리머가 시청자의 answer를 처리
         peerRef.current.signal(data.answer);
       }
     });
@@ -56,10 +54,11 @@ const VideoChat = () => {
       alert("Room name cannot be empty!");
       return;
     }
-    setIsStreamer(true);
+    setIsStreamer(true); // 방송자로 설정
     setInRoom(true);
     socketRef.current.emit("createRoom", roomName);
 
+    // 방송자는 카메라와 마이크 활성화
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -86,20 +85,20 @@ const VideoChat = () => {
       alert("Room name cannot be empty!");
       return;
     }
-    setIsStreamer(false);
+    setIsStreamer(false); // 시청자로 설정
     setInRoom(true);
-    socketRef.current.emit("joinRoom", roomName);
+    socketRef.current.emit("joinRoom", roomName); // 서버에 참여 요청
   };
 
   return (
     <div className="container">
-      <h1 className="text-center my-3">Video Streaming</h1>
+      <h1 className="text-center my-3">Live Streaming</h1>
       {!inRoom && (
         <div className="d-flex justify-content-center mb-3">
           <input
             type="text"
             className="form-control"
-            placeholder="Enter room"
+            placeholder="Enter room name"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
           />
@@ -113,14 +112,12 @@ const VideoChat = () => {
       )}
 
       {inRoom && (
-        <div className="d-flex flex-column align-items-center mt-3">
-          <div className="video-container">
-            {isStreamer ? (
-              <video ref={localVideoRef} autoPlay muted style={{ width: "600px", height: "400px" }} />
-            ) : (
-              <video ref={remoteVideoRef} autoPlay style={{ width: "600px", height: "400px" }} />
-            )}
-          </div>
+        <div className="video-container">
+          {isStreamer ? (
+            <video ref={localVideoRef} autoPlay muted style={{ width: "600px", height: "400px" }} />
+          ) : (
+            <video ref={remoteVideoRef} autoPlay style={{ width: "600px", height: "400px" }} />
+          )}
         </div>
       )}
     </div>
