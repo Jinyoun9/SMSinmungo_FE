@@ -18,7 +18,7 @@ const VideoChat = () => {
 
   useEffect(() => {
     // Socket.IO 서버 연결
-    socketRef.current = io.connect("http://34.69.7.102:8000");
+    socketRef.current = io.connect("http://localhost:8000");
 
     socketRef.current.on("chat message", (data) => {
       setMessages((prevMessages) => [...prevMessages, `${data.username}: ${data.message}`]);
