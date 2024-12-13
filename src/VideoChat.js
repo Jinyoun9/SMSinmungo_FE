@@ -92,15 +92,19 @@ const VideoChat = () => {
 
   const handleJoinRoom = () => {
     if (!roomName.trim()) {
-      alert("Room name cannot be empty!");
-      return;
+        alert("Room name cannot be empty!");
+        return;
     }
 
-    setIsStreamer(false); // 시청자 설정
-    setInRoom(true);
+    if (!socketRef.current || !socketRef.current.connected) {
+        console.error("Socket is not connected. Reconnecting...");
+        socketRef.current.connect(); // 소켓 재연결 시도
+    }
+
     socketRef.current.emit("joinRoom", roomName);
-    console.log("Joining room as viewer");
-  };
+    console.log("Joining room:", roomName);
+};
+
 
   return (
     <div className="container">
