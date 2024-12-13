@@ -11,55 +11,64 @@ const VideoChat = () => {
   const [message, setMessage] = useState("");
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
-  const [raiseHandList, setRaiseHandList] = useState([]); // 손들기 순서 목록
+  const [raiseHandList, setRaiseHandList] = useState([]);
+  const [isCreator, setIsCreator] = useState(false); // 역할 구분
+  const [currentNum, setCurrentNum] = useState("");
   const localVideoRef = useRef(null);
   const socketRef = useRef(null);
-  const [currentNum, setCurrentNum] = useState("");
 
   useEffect(() => {
-    // Socket.IO 서버 연결
     socketRef.current = io.connect("http://localhost:8000");
 
     socketRef.current.on("chat message", (data) => {
       setMessages((prevMessages) => [...prevMessages, `${data.username}: ${data.message}`]);
     });
 
-    // 현재 인원 정보 수신
     socketRef.current.on("currentNum", (num) => {
       console.log("Current number of users in room: ", num);
-      setCurrentNum(num); // 상태 업데이트
+      setCurrentNum(num);
     });
 
-    // 손들기 요청 수신 (서버에서 updateHandRaiseList 이벤트 받음)
     socketRef.current.on("updateHandRaiseList", (handRaiseList) => {
-      setRaiseHandList(handRaiseList); // 발언 순서 목록 업데이트
+      setRaiseHandList(handRaiseList);
     });
 
     return () => {
-      // 컴포넌트 언마운트 시 소켓 연결 해제
       socketRef.current.disconnect();
     };
   }, []);
 
-  const handleConnect = () => {
+  const handleCreateRoom = () => {
     if (roomName === "") {
       alert("Room name cannot be empty!");
       return;
     }
+    setIsCreator(true); // 방 생성자는 카메라 권한 부여
+    handleConnect();
+  };
+
+  const handleJoinRoom = () => {
+    if (roomName === "") {
+      alert("Room name cannot be empty!");
+      return;
+    }
+    setIsCreator(false); // 참여자는 카메라 권한 없음
+    handleConnect();
+  };
+
+  const handleConnect = () => {
     socketRef.current.emit("joinRoom", roomName);
     setInRoom(true);
 
-    socketRef.current.on("currentNum", (num) => {
-      console.log("Current number of users in room: ", num);
-      setCurrentNum(num); // 상태 업데이트
-    });
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
-      .then((stream) => {
-        localVideoRef.current.srcObject = stream;
-        setLocalStream(stream);
-      })
-      .catch(console.error);
+    if (isCreator) {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((stream) => {
+          localVideoRef.current.srcObject = stream;
+          setLocalStream(stream);
+        })
+        .catch(console.error);
+    }
   };
 
   const handleSendMessage = () => {
@@ -70,17 +79,17 @@ const VideoChat = () => {
   };
 
   const handleHandsUp = () => {
-    const userName = "박진영"; // 실제 사용자의 이름
-    socketRef.current.emit("handsup", { username: "박진영" });
+    const userName = "박진영";
+    socketRef.current.emit("handsup", { username: userName });
   };
 
   const handleHandsDown = () => {
-    const userName = "박진영"; // 실제 사용자의 이름
-    socketRef.current.emit("handsdown", { room: roomName, username: "박진영" });
+    const userName = "박진영";
+    socketRef.current.emit("handsdown", { room: roomName, username: userName });
   };
 
   const toggleTrack = (trackType) => {
-    if (!localStream) return;
+    if (!localStream || !isCreator) return; // 방 생성자만 트랙 활성화 가능
     const track = trackType === "video" ? localStream.getVideoTracks()[0] : localStream.getAudioTracks()[0];
     track.enabled = !track.enabled;
   };
@@ -98,8 +107,11 @@ const VideoChat = () => {
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
             />
-            <button className="btn btn-primary" onClick={handleConnect}>
-              Connect
+            <button className="btn btn-success me-2" onClick={handleCreateRoom}>
+              방 만들기
+            </button>
+            <button className="btn btn-primary" onClick={handleJoinRoom}>
+              참여하기
             </button>
           </div>
         </div>
@@ -116,16 +128,32 @@ const VideoChat = () => {
           </div>
           <h3>현재인원: {currentNum}</h3>
 
+          {isCreator && (
+            <div className="d-flex mt-3">
+              <button
+                id="toggleVideo"
+                className="btn-circle enabled-style"
+                onClick={() => toggleTrack("video")}
+              >
+                <i id="videoIcon" className="bi bi-camera-video-fill"></i>
+              </button>
+              <button
+                id="toggleAudio"
+                className="btn-circle enabled-style"
+                onClick={() => toggleTrack("audio")}
+              >
+                <i id="audioIcon" className="bi bi-mic-fill"></i>
+              </button>
+            </div>
+          )}
+
           <div className="d-flex flex-column align-items-center mt-3">
-            {/* 손들기 버튼 */}
             <button className="btn btn-warning mb-3" onClick={handleHandsUp}>
               손들기
             </button>
             <button className="btn btn-warning mb-3" onClick={handleHandsDown}>
               손 내리기
             </button>
-
-            {/* 발언 순서 목록 */}
             <ul className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
               {raiseHandList.map((user, index) => (
                 <li key={index} className="list-group-item">
@@ -133,19 +161,11 @@ const VideoChat = () => {
                 </li>
               ))}
             </ul>
-
-            {/* 발언 순서 목록을 h3로 표시 */}
-            {raiseHandList.length > 0 && (
-              <h3>발언 순서: {raiseHandList.map((user, index) => `${index + 1}. ${user}`).join(', ')}</h3>
-            )}
-
-            {/* 채팅 메시지 */}
-            <ul id="messages" className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
+            <ul className="list-group mb-3" style={{ width: "600px", maxHeight: "200px", overflowY: "auto" }}>
               {messages.map((msg, index) => (
                 <li key={index} className="list-group-item">{msg}</li>
               ))}
             </ul>
-
             <div className="input-group input-group-lg" style={{ maxWidth: "600px" }}>
               <input
                 type="text"
@@ -158,23 +178,6 @@ const VideoChat = () => {
                 Send
               </button>
             </div>
-          </div>
-
-          <div className="d-flex mt-3">
-            <button
-              id="toggleVideo"
-              className="btn-circle enabled-style"
-              onClick={() => toggleTrack("video")}
-            >
-              <i id="videoIcon" className="bi bi-camera-video-fill"></i>
-            </button>
-            <button
-              id="toggleAudio"
-              className="btn-circle enabled-style"
-              onClick={() => toggleTrack("audio")}
-            >
-              <i id="audioIcon" className="bi bi-mic-fill"></i>
-            </button>
           </div>
         </div>
       )}
